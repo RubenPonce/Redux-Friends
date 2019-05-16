@@ -8,7 +8,7 @@ const token =
 
 let nextId = 7;
 
-let friends = [
+let employees = [
   {
     id: 1,
     name: 'Ben',
@@ -53,17 +53,18 @@ app.use(cors());
 
 function authenticator(req, res, next) {
   const { authorization } = req.headers;
-  if (authorization === token) {
+  // if (authorization === token) {
     next();
-  } else {
-    res.status(403).json({ error: 'User be logged in to do that.' });
-  }
+  // }
+  //  else {
+  //   res.status(403).json({ error: 'User be logged in to do that.' });
+  // }
 }
 
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  if (username === 'Lambda School' && password === 'i<3Lambd4') {
-    req.loggedIn = true;
+  if (username === 'a' && password === 'b') {
+    req.isLoggingIn = true;
     res.status(200).json({
       payload: token
     });
@@ -74,55 +75,55 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-app.get('/api/friends', authenticator, (req, res) => {
+app.get('/api/employees', authenticator, (req, res) => {
   setTimeout(() => {
-    res.send(friends);
+    res.send(employees);
   }, 1000);
 });
 
-app.get('/api/friends/:id', authenticator, (req, res) => {
-  const friend = friends.find(f => f.id == req.params.id);
+app.get('/api/employees/:id', authenticator, (req, res) => {
+  const employee = employees.find(f => f.id == req.params.id);
 
-  if (friend) {
-    res.status(200).json(friend);
+  if (employee) {
+    res.status(200).json(employee);
   } else {
-    res.status(404).send({ msg: 'Friend not found' });
+    res.status(404).send({ msg: 'employee not found' });
   }
 });
 
-app.post('/api/friends', authenticator, (req, res) => {
-  const friend = { id: getNextId(), ...req.body };
+app.post('/api/employees', authenticator, (req, res) => {
+  const employee = { id: getNextId(), ...req.body };
 
-  friends = [...friends, friend];
+  employees = [...employees, employee];
 
-  res.send(friends);
+  res.send(employees);
 });
 
-app.put('/api/friends/:id', authenticator, (req, res) => {
+app.put('/api/employees/:id', authenticator, (req, res) => {
   const { id } = req.params;
 
-  const friendIndex = friends.findIndex(f => f.id == id);
+  const employeeIndex = employees.findIndex(f => f.id == id);
 
-  if (friendIndex > -1) {
-    const friend = { ...friends[friendIndex], ...req.body };
+  if (employeeIndex > -1) {
+    const employee = { ...employees[employeeIndex], ...req.body };
 
-    friends = [
-      ...friends.slice(0, friendIndex),
-      friend,
-      ...friends.slice(friendIndex + 1)
+    employees = [
+      ...employees.slice(0, employeeIndex),
+      employee,
+      ...employees.slice(employeeIndex + 1)
     ];
-    res.send(friends);
+    res.send(employees);
   } else {
-    res.status(404).send({ msg: 'Friend not found' });
+    res.status(404).send({ msg: 'employee not found' });
   }
 });
 
-app.delete('/api/friends/:id', authenticator, (req, res) => {
+app.delete('/api/employees/:id', authenticator, (req, res) => {
   const { id } = req.params;
 
-  friends = friends.filter(f => f.id !== Number(id));
+  employees = employees.filter(f => f.id !== Number(id));
 
-  res.send(friends);
+  res.send(employees);
 });
 
 function getNextId() {
