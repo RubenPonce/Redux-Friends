@@ -52,12 +52,12 @@ app.use(bodyParser.json());
 app.use(cors());
 
 function authenticator(req, res, next) {
-  const { authorization } = req.headers;
-  if (authorization === token) {
+  // const { authorization } = req.headers;
+  // if (authorization === token) {
     next();
-  } else {
-    res.status(403).json({ error: 'User be logged in to do that.' });
-  }
+  // } else {
+  //   res.status(403).json({ error: 'User be logged in to do that.' });
+  // }
 }
 
 app.post('/api/login', (req, res) => {
@@ -74,7 +74,7 @@ app.post('/api/login', (req, res) => {
   }
 });
 
-app.get('/api/friends', authenticator, (req, res) => {
+app.get('/api/friends', (req, res) => {
   setTimeout(() => {
     res.send(friends);
   }, 1000);
@@ -90,15 +90,15 @@ app.get('/api/friends/:id', authenticator, (req, res) => {
   }
 });
 
-app.post('/api/friends', authenticator, (req, res) => {
+app.post('/api/friends', (req, res) => {
   const friend = { id: getNextId(), ...req.body };
-
+console.log(friend)
   friends = [...friends, friend];
 
   res.send(friends);
 });
 
-app.put('/api/friends/:id', authenticator, (req, res) => {
+app.put('/api/friends/:id', (req, res) => {
   const { id } = req.params;
 
   const friendIndex = friends.findIndex(f => f.id == id);
