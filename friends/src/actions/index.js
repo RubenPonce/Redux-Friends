@@ -39,6 +39,7 @@ export const getFriends = () => (dispatch) =>{
         dispatch({type: SUCCESS, payload: res.data})
       });
     };
+    
     export const editFriend = friend => {
       axios
         .put(`http://localhost:5000/friends/${friend.id}`, friend)
